@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "C:\Users\Muhammad Talha Imran\PycharmProjects\CV_Assignment_2\SCR\SE_Net.py", line 123, in <module>
+    starting_epoch.load_state_dict(checkpoint["epoch"])
+AttributeError: 'int' object has no attribute 'load_state_dict'

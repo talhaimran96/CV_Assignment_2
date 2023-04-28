@@ -1,0 +1,1 @@
+{"cLassification_loss": 0.8890478610992432, "arousal_loss": 0.005303315352648497, "valence_loss": 0.008592890575528145, "_timestamp": 1682474365.5420275, "_runtime": 110504.77458143234, "_step": 71959, "acc": 32.783195798949734, "training_loss": 0.8801717036823277, "validation_loss": 1.9849852547049522, "_wandb": {"runtime": 110503}}

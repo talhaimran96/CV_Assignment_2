@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "C:\Users\Muhammad Talha Imran\PycharmProjects\CV_Assignment_2\SCR\SE_Net.py", line 119, in <module>
+    temp = torch.tensor(dtype="int")
+TypeError: tensor() missing 1 required positional arguments: "data"

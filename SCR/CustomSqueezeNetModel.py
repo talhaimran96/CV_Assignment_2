@@ -3,6 +3,7 @@ import torchvision.models
 from torchvision import models
 from torch import nn
 from torchviz import make_dot
+from torchsummary import summary
 
 
 class senet_model(nn.Module):
@@ -44,8 +45,9 @@ class senet_model(nn.Module):
 #
 if __name__ == "__main__":
     # Only for testing, no real use case
-    model = senet_model()
-    print(model)
-    x, y, z = model(torch.rand(size=[16, 3, 224, 224]))
-    print(x.size(), y.size(), z.size())
-    print(z[:, 0, None].size())
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    model = senet_model().to(device)
+    x = torch.rand(size=[64, 3, 224, 224])
+    summary(model, (3, 224, 224))
+    make_dot(model(x), params=dict(model.named_parameters()))
+    make_dot(model(x)).render("../Models" + "SE_net_model", format="png")

@@ -24,8 +24,8 @@ class mobilenet_model(nn.Module):
                                             nn.Hardswish(), nn.Dropout(p=0.2, inplace=True),
                                             nn.Linear(in_features=1024, out_features=8))
         self.regression = nn.Sequential(nn.Linear(in_features=576, out_features=1024, bias=True),
-                                            nn.Hardswish(), nn.Dropout(p=0.2, inplace=True),
-                                            nn.Linear(in_features=1024, out_features=2))
+                                        nn.Hardswish(), nn.Dropout(p=0.2, inplace=True),
+                                        nn.Linear(in_features=1024, out_features=2))
 
     def forward(self, x):
         features = self.model(x)
@@ -33,8 +33,8 @@ class mobilenet_model(nn.Module):
         feature = torch.flatten(features, 1)
         classification = self.classification(feature)
         regression = self.regression(feature)
-        arousal = regression[:, 0]
-        valence = regression[:, 1]
+        arousal = regression[:, 0, None]
+        valence = regression[:, 1, None]
         return classification, arousal, valence
 
 

@@ -88,11 +88,8 @@ sizes.
 
 ## Models implemented:
 
-**Please note that more detailed discussion can be found in the assignment report, link is mentioned below**
-
-```http
-https://drive.google.com/drive/folders/1qWtsccwn86x9icn-79FX_FbDhpsNxEEn?usp=share_link
-```
+**Please note that more detailed discussion can be found in
+the [Assignment Report](https://drive.google.com/drive/folders/1qWtsccwn86x9icn-79FX_FbDhpsNxEEn?usp=share_link)**
 
 ## Instructions for setting up the environment for running this implementation
 
@@ -123,9 +120,7 @@ https://drive.google.com/drive/folders/1qWtsccwn86x9icn-79FX_FbDhpsNxEEn?usp=sha
 
 ### Link to Dataset
 
-```http
-https://drive.google.com/drive/folders/1BPioVa6zLIm8VbX_dftWQIC4fTe4veUY?usp=share_link
-```
+[Download Dataset](https://drive.google.com/drive/folders/1BPioVa6zLIm8VbX_dftWQIC4fTe4veUY?usp=share_link)
 
 **Create** a **Dataset** folder in the project and place the dataset in the dataset folder(ignored while uploading to
 GitHub),
@@ -145,11 +140,11 @@ extract and place the contents in the dataset folder as shown below.
 
 ##### Repository Directory Navigation
 
-- Accumulated_data >> Contains illustrations for reporting and GitHub
+- [Accumulated_data](Accumulated_data) >> Contains illustrations for reporting and GitHub
 - Dataset >> Contains the dataset
-- Models >> Models are saved to and loaded from this directory
-- Results >> Evaluation metrics and experiment outputs are saved here
-- SCR >> contain the .py files for execution
+- [Models](Models) >> Models are saved to and loaded from this directory
+- [Results](Results) >> Evaluation metrics and experiment outputs are saved here
+- [SCR](SCR) >> contain the .py files for execution
 
 ![Directories.PNG](Accumulated_data%2FDirectories.PNG)
 
@@ -214,7 +209,7 @@ Training parameters can easily be set through the below-mentioned section:
 - **std** >> Per channel standard deviation for normalization
 - **augmentations** >> from the albumentations package
 
-### Cross Entropy
+### Cross Entropy Weight Calculations
 
 Calculation of the weights listed above, The calculation has been commented and the values for the dataset have been
 hardcoded to save time. If any changes to the dataset are made, this should be uncommented for new weight calculation
@@ -234,3 +229,59 @@ These ratios were **found to work empirically** and hence used. They may be chan
 ![Change_loss_ratios.png](Accumulated_data%2FChange_loss_ratios.png)
 
 ### Experiment Logging
+
+Experiment logging us done using [Wandb](wandb.ai)
+
+Wandb report are
+available [here](https://drive.google.com/drive/folders/1O5k4GWzKOGFCsXAejOQUIcBfTclQXhxG?usp=share_link)
+
+### Parameters of each Model are listed Below
+
+| Model          | Params      |
+|----------------|-------------|
+| Talha_Net      | 423,498     |
+| SqueezeNet1.1  | 1,235,496   |
+| MobileNet      | 2,118,954   |
+| Efficienet B0  | 4,020,358   |
+| Googlenet      | 6,624,904   |
+| RESNET18       | 11,689,512  |
+| InceptionV3    | 27,161,264  |
+| Efficienet V2M | 54,139,356  |
+| Efficienet V2  | 118,515,272 |
+| VGG16          | 138,365,992 |
+| ViT 14.00      | 633,470,440 |
+
+### Model Visualization
+
+TorchVis Visualizations of the models are available in the [Models directory](Models)
+
+
+
+![Mobile_net_model.png](Models%2FMobile_net_model.png)
+
+
+### Training
+
+Best validation Accuracy model is saves i.e. stopping early.<br />
+Examples: Train and Validation Accuracy for SE Net model:
+![SE_Net Training and val Accuracy.png](Results%2FSE_Net%20Training%20and%20val%20Accuracy.png)
+<br />
+
+
+Examples Train and Validation Loss for SE Net model:
+![SE_Net Training and val Loss.png](Results%2FSE_Net%20Training%20and%20val%20Loss.png)
+
+## Results
+
+The [Results](Results) directory contains both quantitative and qualitative metrics run on each model.
+**Nomenclature** is as follows:
+
+- Classification_report_k_<**Model Name**>.csv >> SKLearn Classification report in .csv
+- Confusion_matrix_<**Model Name**>.jpg >> Confusion Matrix
+- <**Model Name**> Training and val Accuracy.png >> Training and Validation Accuracies over the training epochs
+- <**Model Name**> Training and val Loss.png >> Training and Validation Losses over the training epochs
+- <**Model Name**>_evaluation_metrics.csv >> Contains the saved evaluation metrics in .csv format
+- <**Model Name**>_examples.png >> Set of 16 random test example images as qualitative measure
+- <**Model Name**>_experiment_data.csv >> Contains the saved experimental data in .csv format
+
+![Results_Dir.PNG](Accumulated_data%2FResults_Dir.PNG)

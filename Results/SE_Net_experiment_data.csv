@@ -1,0 +1,2 @@
+,Model/Backbone,Learning_rate,Batch_size,Training_set_size,Epochs,Test_set_size,Validation_set_size,Tranfer_learning,Max Validation_Acc,Classification_loss,Arousal_loss,Valence_loss,Execution_time
+0,SE_Net,0.0001,128,230120,30,57531,3999,False,49.63740935233808,"tensor(0.8660, device='cuda:0')","tensor(0.0067, device='cuda:0')","tensor(0.0121, device='cuda:0')",49757.355189561844

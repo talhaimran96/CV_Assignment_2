@@ -23,3 +23,10 @@ config: {'learning_rate': 5e-05, 'architecture': 'SE_Net_test', 'dataset': 'Face
 2023-04-28 07:13:25,126 INFO    MainThread:11344 [wandb_run.py:_redirect():2077] Wrapping output streams.
 2023-04-28 07:13:25,126 INFO    MainThread:11344 [wandb_run.py:_redirect():2102] Redirects installed.
 2023-04-28 07:13:25,128 INFO    MainThread:11344 [wandb_init.py:init():824] run started, returning control to user process
+2023-04-29 03:59:21,191 INFO    MainThread:11344 [wandb_run.py:_finish():1892] finishing run talhaimran96/Custom_model-test/tr64fnig
+2023-04-29 03:59:21,193 INFO    MainThread:11344 [wandb_run.py:_atexit_cleanup():2126] got exitcode: 0
+2023-04-29 03:59:21,195 INFO    MainThread:11344 [wandb_run.py:_restore():2109] restore
+2023-04-29 03:59:21,195 INFO    MainThread:11344 [wandb_run.py:_restore():2115] restore done
+2023-04-29 03:59:27,194 INFO    MainThread:11344 [wandb_run.py:_footer_history_summary_info():3476] rendering history
+2023-04-29 03:59:27,195 INFO    MainThread:11344 [wandb_run.py:_footer_history_summary_info():3508] rendering summary
+2023-04-29 03:59:27,220 INFO    MainThread:11344 [wandb_run.py:_footer_sync_info():3434] logging synced files

@@ -1,1 +1,1 @@
-{"cLassification_loss": 1.1602798700332642, "arousal_loss": 0.004955442622303963, "valence_loss": 0.009332525543868542, "_timestamp": 1682715439.1008654, "_runtime": 67454.48738241196, "_step": 42275}
+{"cLassification_loss": 1.0714858770370483, "arousal_loss": 0.00586065324023366, "valence_loss": 0.009663263335824013, "_timestamp": 1682722761.1321218, "_runtime": 74776.51863884926, "_step": 46773, "acc": 45.33633408352088, "training_loss": 1.2938782693745694, "validation_loss": 1.654364600777626, "_wandb": {"runtime": 74775}}

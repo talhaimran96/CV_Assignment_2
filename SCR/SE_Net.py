@@ -1,23 +1,14 @@
 import torch
-from torch import nn
-import torchvision
-from torch.optim import Adam
 import numpy as np
-from tqdm import tqdm
-from torchvision import models
-from torchsummary import summary
-from torchmetrics.classification import MulticlassCohenKappa, MulticlassAUROC, MulticlassF1Score, MulticlassRecall, \
-    MulticlassPrecision, MulticlassConfusionMatrix, MulticlassROC
-from FaceDataloader import FaceDataset
+from FaceDataSet import FaceDataset
 from torch.utils.data import DataLoader
-import cv2
 import albumentations as Augmentations
 import os
 import matplotlib.pyplot as plt
 import wandb
 import pandas as pd
 from CustomSqueezeNetModel import senet_model
-from HelperFunctions import run_epoch, run_test, save_classification_report, display_examples, compute_class_weights
+from HelperFunctions import run_epoch, run_test, display_examples, save_preformance_metric
 import time
 from sklearn.metrics import confusion_matrix, cohen_kappa_score, classification_report, ConfusionMatrixDisplay
 from sklearn.metrics import average_precision_score, mean_squared_error, auc
@@ -25,19 +16,19 @@ import krippendorff
 
 # These params can be updated to allow for better control of the program(i.e. the control knobs of this code)
 run_training = True  # False to run inferences, otherwise it'll start train the model
-resume_training = True  # If training needs to be resumed from some epoch
+resume_training = False  # If training needs to be resumed from some epoch
 load_model = True  # If you want to load a model previously trained
 run_test_set = True  # True to run test set post training
 
 model_name = os.path.basename(__file__).split(".")[
     0]  # Name of the .py file running to standardize the names of the saved files and ease of later use
 batch_size = 128
-learning_rate = 0.00005
+learning_rate = 0.0001
 pretrained = False
-epochs = 40
+epochs = 30
 classes = 8
 device_name = torch.cuda.get_device_name(0)
-device = "cuda:0" if torch.cuda.is_available() else "cpu"
+device = "cuda" if torch.cuda.is_available() else "cpu"
 starting_time = time.time()
 class_names = ["Neutral", "Happy", "Sad", "Surprise", "Fear", "Disgust", "Anger", "Contempt"]
 
@@ -56,7 +47,7 @@ figure_save_path = "../Results"
 mean = [0.485, 0.456, 0.406]
 std = [0.229, 0.224, 0.225]
 
-augmentations = Augmentations.Compose([Augmentations.HorizontalFlip(), Augmentations.VerticalFlip(),
+augmentations = Augmentations.Compose([Augmentations.HorizontalFlip(),
                                        Augmentations.GaussNoise()])
 
 train_set = FaceDataset(train_image_path, train_annotation_path, mean, std, augmentations)
@@ -70,12 +61,15 @@ test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=True)
 # computing weights for loss function
 # class_weights = (compute_class_weights(train_annotation_path, class_names))
 # class_weights = torch.tensor(class_weights, dtype=torch.float).to(device)
+
+# calculated once, then hard coded to save time
 class_weights = torch.tensor(np.array([0.480225, 0.267503, 1.41232, 2.55191, 5.63756, 9.45474, 1.44508, 9.58837]),
                              dtype=torch.float).to(device)
-validation_set = FaceDataset(validation_image_path, validation_annotation_path, mean, std, augmentations)
+
+validation_set = FaceDataset(validation_image_path, validation_annotation_path, mean, std)
 validation_loader = DataLoader(validation_set, batch_size=batch_size, shuffle=True)
 
-# only for testing, this loop is meant to loop error verification before committing to full length training
+## only for testing, this loop is meant to loop error verification before committing to full length training
 # mini_size = int(0.5 * len(validation_set))
 # mini_test_size = len(validation_set) - mini_size
 # mini_dataset, mini_test_set = torch.utils.data.random_split(validation_set, [mini_size, mini_test_size])
@@ -100,12 +94,12 @@ if run_training:
     val_classification_loss_list = []
     val_arousal_loss_list = []
     val_valence_loss_list = []
-    starting_epoch = 14
+    starting_epoch = 0
     val_accuracy_max = -1
 
     wandb.init(
         # set the wandb project where this run will be logged
-        project="Custom_model-test",
+        project="CV_Assignment_2",
 
         # track hyperparameters and run metadata
         config={
@@ -287,34 +281,22 @@ if run_test_set:
 
         senet.eval()
 
+    ##
+
     senet.to(device)
     predicted_classifications, predicted_arousal, predicted_valence, groundtruth_classification, groundtruth_arousal, groundtruth_valence = run_test(
         senet, test_loader, device)
 
-    # confusion_matrix = MulticlassConfusionMatrix(num_classes=classes)
-    # confusion_matrix = confusion_matrix(groundtruth_classification, predicted_classifications)
-    print(groundtruth_classification, predicted_classifications)
-    confusion_matrix = confusion_matrix(groundtruth_classification, predicted_classifications)
-    display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix, display_labels=class_names)
-    display.plot()
-    plt.title(f"Confusion_matrix_{model_name}")
-    plt.savefig(f"../Results/Confusion_matrix_{model_name}.jpg")
-    krippendorff_data = np.array([groundtruth_classification, predicted_classifications])
-    print("Krippendorff's alpha for nominal metric: ", krippendorff.alpha(reliability_data=krippendorff_data,
-                                                                          level_of_measurement="nominal"))
-    print("cohen_kappa_score: ", cohen_kappa_score(groundtruth_classification, predicted_classifications))
-    print("AUC: ",
-          auc(groundtruth_classification, predicted_classifications))
-    print("AUC – Precision Recall: ",
-          average_precision_score(groundtruth_classification, predicted_classifications))
+    # # Computing Evaluation Metrics
+    save_preformance_metric(model_name, class_names, predicted_classifications, predicted_arousal, predicted_valence,
+                            groundtruth_classification, groundtruth_arousal, groundtruth_valence)
+    # Creating an example batch of 16 images to display
+    examples_dataset, _ = torch.utils.data.random_split(test_set, [16, len(test_set) - 16])
+    example_dataloader = DataLoader(examples_dataset, batch_size=16)
+    predicted_classifications, predicted_arousal, predicted_valence, groundtruth_classification, groundtruth_arousal, groundtruth_valence = run_test(
+        senet, example_dataloader, device)
 
-    # Reusing the function from Assignment_1
-    report = classification_report(groundtruth_classification, predicted_classifications,
-                                   target_names=class_names, output_dict=True)
-    save_classification_report(report=report, path="../Results/", model_name=model_name)
-
-    print("MSE Arousal: ", mean_squared_error(groundtruth_arousal, predicted_arousal))
-    print("MSE Valence: ", mean_squared_error(groundtruth_valence, predicted_valence))
-
-    print("Correlation Arousal: ", np.corrcoef((groundtruth_arousal), (predicted_arousal)))
-    print("Correlation Valence: ", np.corrcoef((groundtruth_valence), (predicted_valence)))
+    # displays, 16 random examples from the dataset and their classification and Regression values, both Predicted and Ground Truth
+    display_examples(example_dataloader, model_name, class_names, predicted_classifications, predicted_arousal,
+                     predicted_valence,
+                     groundtruth_classification, groundtruth_arousal, groundtruth_valence)

@@ -8,7 +8,7 @@ from torchvision import models
 from torchsummary import summary
 from torchmetrics.classification import MulticlassCohenKappa, MulticlassAUROC, MulticlassF1Score, MulticlassRecall, \
     MulticlassPrecision, MulticlassConfusionMatrix, MulticlassROC
-from FaceDataloader import FaceDataset
+from FaceDataSet import FaceDataset
 from torch.utils.data import DataLoader
 import cv2
 import albumentations as Augmentations

@@ -26,7 +26,7 @@ class senet_model(nn.Module):
                                             nn.ReLU(inplace=True),
                                             nn.AdaptiveAvgPool2d(output_size=(1, 1)))
         self.regression = nn.Sequential(nn.Dropout(p=0.5, inplace=False),
-                                        nn.Conv2d(512, 1, kernel_size=(1, 1), stride=(1, 1)),
+                                        nn.Conv2d(512, 2, kernel_size=(1, 1), stride=(1, 1)),
                                         nn.ReLU(inplace=True),
                                         nn.AdaptiveAvgPool2d(output_size=(1, 1)))
 
@@ -35,12 +35,17 @@ class senet_model(nn.Module):
         feature = self.layer_1(feature)
         # feature = torch.flatten(feature, 1)
         classification = self.classification(feature)
-        arousal = self.regression(feature)
-        valence = self.regression(feature)
+        regression = self.regression(feature)
+        arousal = regression[:, 0, None]
+        valence = regression[:, 1, None]
         return torch.flatten(classification, 1), torch.flatten(arousal, 1), torch.flatten(valence, 1)
 
 
 #
 if __name__ == "__main__":
-    models = torchvision.models.squeezenet1_1()
-    print(models)
+    # Only for testing, no real use case
+    model = senet_model()
+    print(model)
+    x, y, z = model(torch.rand(size=[16, 3, 224, 224]))
+    print(x.size(), y.size(), z.size())
+    print(z[:, 0, None].size())

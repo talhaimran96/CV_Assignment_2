@@ -2,14 +2,13 @@ import numpy as np
 import torch
 import torchvision.models
 from torchvision.transforms import transforms as torch_transformations
-from FaceDataloader import FaceDataset
+from FaceDataSet import FaceDataset
 from torch.utils.data import DataLoader
 import cv2
 import albumentations as A
 import os
-from sklearn.metrics import average_precision_score
+from sklearn.metrics import average_precision_score, roc_auc_score,roc_curve
 import matplotlib.pyplot as plt
-import CustomVGGModel
 from torchsummary import summary
 
 # these values come from imagenet, i.e leverage the relationships of natural objects
@@ -72,20 +71,51 @@ val_accuracy_max = -1
 # temp_1.req
 # print("Correlation Arousal: ", np.corrcoef([1, 2, 2, 3], [1, 2, 3, 4]))
 #
-# print(average_precision_score(np.array([1, 1, 1, 0, 0, 0, 1, 1, 1]), np.array([1, 1, 0, 0, 0, 1, 1, 1, 0])))
 
+# def multiclass_auc(y_true, y_pred):
+#     """
+#        Calculates the AUC for multiclass classification using the One-vs-All (OvA) strategy.
+#
+#        Args:
+#        - y_true (list or array-like): True class labels.
+#        - y_pred (list or array-like): Predicted class probabilities.
+#
+#        Returns:
+#        - auc (float): AUC score.
+#        """
+#     # Convert input to numpy arrays
+#     y_true = np.asarray(y_true)
+#     y_pred = np.asarray(y_pred)
+#
+#     # Convert true labels to one-hot encoding
+#     n_classes = len(np.unique(y_true))
+#     y_true_onehot = np.zeros((len(y_true), n_classes))
+#     y_true_onehot[np.arange(len(y_true)), y_true] = 1
+#
+#     # Compute the AUC for each class using the OvA strategy
+#     auc_scores = []
+#     for i in range(n_classes):
+#         y_true_class = y_true_onehot[:, i]
+#         y_pred_class = y_pred[:, i]
+#         auc_scores.append(roc_auc_score(y_true_class, y_pred_class))
+#
+#     # Compute the average AUC across all classes
+#     auc = np.mean(auc_scores)
+#     return auc
+# print(multiclass_auc(np.array([[1, 1, 1, 0, 0, 0, 1, 1, 2]]), np.array([[1, 1, 0, 0, 0, 1, 1, 1, 0]])))
 
-from sklearn.utils import class_weight
-import pandas as pd
-import numpy as np
+# from sklearn.utils import class_weight
+# import pandas as pd
+# import numpy as np
+#
+# y_train = pd.DataFrame(['dog', 'dog', 'dog', 'dog', 'dog',
+#                         'cat', 'cat', 'cat', 'bat', 'bat'])
+#
+# weights = class_weight.compute_class_weight(
+#     class_weight='balanced',
+#     classes=np.unique(y_train),
+#     y=y_train.values.reshape(-1)
+# )
+#
+# print(weights,np.unique(y_train),y_train.values.reshape(-1))
 
-y_train = pd.DataFrame(['dog', 'dog', 'dog', 'dog', 'dog',
-                        'cat', 'cat', 'cat', 'bat', 'bat'])
-
-weights = class_weight.compute_class_weight(
-    class_weight='balanced',
-    classes=np.unique(y_train),
-    y=y_train.values.reshape(-1)
-)
-
-print(weights,np.unique(y_train),y_train.values.reshape(-1))

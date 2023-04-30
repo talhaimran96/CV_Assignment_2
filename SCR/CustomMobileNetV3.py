@@ -25,17 +25,24 @@ class mobilenet_model(nn.Module):
                                             nn.Linear(in_features=1024, out_features=8))
         self.regression = nn.Sequential(nn.Linear(in_features=576, out_features=1024, bias=True),
                                             nn.Hardswish(), nn.Dropout(p=0.2, inplace=True),
-                                            nn.Linear(in_features=1024, out_features=1))
+                                            nn.Linear(in_features=1024, out_features=2))
 
     def forward(self, x):
         features = self.model(x)
         features = self.layer_1(features)
         feature = torch.flatten(features, 1)
         classification = self.classification(feature)
-        arousal = self.regression(feature)
-        valence = self.regression(feature)
+        regression = self.regression(feature)
+        arousal = regression[:, 0]
+        valence = regression[:, 1]
         return classification, arousal, valence
 
 
 # models = torchvision.models.mobilenet_v3_small(pretrained=True)
 # print(models)
+if __name__ == "__main__":
+    model = mobilenet_model()
+    print(model)
+    x, y, z = model(torch.rand(size=[16, 3, 224, 224]))
+    print(x.size(), y.size(), z.size())
+    print(z[:, 0, None].size())

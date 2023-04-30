@@ -2,5 +2,5 @@ Dataset/train_set/annotations
 Dataset/train_set/images
 Dataset/val_set/annotations
 Dataset/val_set/images
-Models
 SCR/wandb
+SCR/test.py

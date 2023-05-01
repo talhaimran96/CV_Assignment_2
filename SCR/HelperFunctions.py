@@ -163,6 +163,7 @@ def display_examples(dataloader, model_name, class_names, predicted_classificati
                                                       ])
         image_batch = reverse_norm(image_batch)
         image_batch = image_batch.numpy()
+        # seperate each image and append to an array
         for image in range(np.shape(image_batch)[0]):
             images.append(image_batch[image, :, :, :])
     p = len(images)
@@ -173,7 +174,7 @@ def display_examples(dataloader, model_name, class_names, predicted_classificati
     plt.title("Examples: " + model_name)
     for img in images:
         plt.subplot(q, p, i)
-        plt.imshow((cv2.cvtColor(img.transpose(1, 2, 0), cv2.COLOR_BGR2RGB) * 255))
+        plt.imshow((cv2.cvtColor(img.transpose(1, 2, 0), cv2.COLOR_BGR2RGB)))
         plt.title("Actual lab: " + class_names[groundtruth_classification[i - 1]] + ", "
                   + "Prediction: " +
                   class_names[groundtruth_classification[i - 1]] + "\n"

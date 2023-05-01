@@ -271,6 +271,9 @@ Examples: Train and Validation Accuracy for SE Net model:
 Examples Train and Validation Loss for SE Net model:
 ![SE_Net Training and val Loss.png](Results%2FSE_Net%20Training%20and%20val%20Loss.png)
 
+Mentioned Below are the setting used for training
+
+
 ## Results
 
 The [Results](Results) directory contains both quantitative and qualitative metrics run on each model.

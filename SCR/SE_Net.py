@@ -15,7 +15,7 @@ from sklearn.metrics import average_precision_score, mean_squared_error, auc
 import krippendorff
 
 # These params can be updated to allow for better control of the program(i.e. the control knobs of this code)
-run_training = True  # False to run inferences, otherwise it'll start train the model
+run_training = False  # False to run inferences, otherwise it'll start train the model
 resume_training = False  # If training needs to be resumed from some epoch
 load_model = True  # If you want to load a model previously trained
 run_test_set = True  # True to run test set post training
@@ -282,12 +282,12 @@ if run_test_set:
         senet.eval()
 
     ##
-
+    # Running the test set
     senet.to(device)
     predicted_classifications, predicted_arousal, predicted_valence, groundtruth_classification, groundtruth_arousal, groundtruth_valence = run_test(
         senet, test_loader, device)
 
-    # # Computing Evaluation Metrics
+    # Computing Evaluation Metrics
     save_preformance_metric(model_name, class_names, predicted_classifications, predicted_arousal, predicted_valence,
                             groundtruth_classification, groundtruth_arousal, groundtruth_valence)
     # Creating an example batch of 16 images to display

@@ -47,7 +47,7 @@ if __name__ == "__main__":
     # Only for testing, no real use case
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model = senet_model().to(device)
-    x = torch.rand(size=[64, 3, 224, 224])
+    x = torch.rand(size=[64, 3, 224, 224]).to(device)
     summary(model, (3, 224, 224))
     make_dot(model(x), params=dict(model.named_parameters()))
-    make_dot(model(x)).render("../Models" + "SE_net_model", format="png")
+    make_dot(model(x)).render("SE_net_model", format="png")

@@ -96,7 +96,7 @@ if run_training:
     val_classification_loss_list = []
     val_arousal_loss_list = []
     val_valence_loss_list = []
-    starting_epoch = 5 # Set to 5 as 5 epochs were previously run on COLAB, then continues on local machine
+    starting_epoch = 0
     val_accuracy_max = -1
 
     wandb.init(

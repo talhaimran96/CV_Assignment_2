@@ -1,0 +1,2 @@
+,Model/Backbone,Learning_rate,Batch_size,Training_set_size,Epochs,Test_set_size,Validation_set_size,Tranfer_learning,Max Validation_Acc,Classification_loss,Arousal_loss,Valence_loss,Execution_time
+0,Mobile_net,1e-05,512,230120,12,57531,3999,False,49.041386382993515,"tensor(1.2277, device='cuda:0')","tensor(0.0040, device='cuda:0')","tensor(0.0057, device='cuda:0')",8541.84577512741

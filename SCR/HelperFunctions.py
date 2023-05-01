@@ -177,7 +177,7 @@ def display_examples(dataloader, model_name, class_names, predicted_classificati
         plt.imshow((cv2.cvtColor(img.transpose(1, 2, 0), cv2.COLOR_BGR2RGB)))
         plt.title("Actual lab: " + class_names[groundtruth_classification[i - 1]] + ", "
                   + "Prediction: " +
-                  class_names[groundtruth_classification[i - 1]] + "\n"
+                  class_names[predicted_classifications[i - 1]] + "\n"
                   + "Actual Arousal: " +
                   str(round(groundtruth_arousal[i - 1], 4)) + ", "
                   + "Predicted Arousal: " +

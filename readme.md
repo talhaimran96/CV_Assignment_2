@@ -237,42 +237,53 @@ available [here](https://drive.google.com/drive/folders/1O5k4GWzKOGFCsXAejOQUIcB
 
 ### Parameters of each Model are listed Below
 
-| Model          | Params      |
-|----------------|-------------|
-| Talha_Net      | 423,498     |
-| SqueezeNet1.1  | 1,235,496   |
-| MobileNet      | 2,118,954   |
-| Efficienet B0  | 4,020,358   |
-| Googlenet      | 6,624,904   |
-| RESNET18       | 11,689,512  |
-| InceptionV3    | 27,161,264  |
-| Efficienet V2M | 54,139,356  |
-| Efficienet V2  | 118,515,272 |
-| VGG16          | 138,365,992 |
-| ViT 14.00      | 633,470,440 |
+Highlighted models are tested for this assignment due to the few number of parameters and the challenges listed above.
+
+| Model             | Params      |
+|-------------------|-------------|
+| **Talha_Net**     | 423,498     |
+| **SqueezeNet1.1** | 1,235,496   |
+| **MobileNet**     | 2,118,954   |
+| **Efficienet B0** | 4,020,358   |
+| Googlenet         | 6,624,904   |
+| RESNET18          | 11,689,512  |
+| InceptionV3       | 27,161,264  |
+| Efficienet V2M    | 54,139,356  |
+| Efficienet V2     | 118,515,272 |
+| VGG16             | 138,365,992 |
+| ViT 14.00         | 633,470,440 |
 
 ### Model Visualization
 
 TorchVis Visualizations of the models are available in the [Models directory](Models)
 
-
-
 ![Mobile_net_model.png](Models%2FMobile_net_model.png)
+
+**T Net Architecture(Proposed)**
+
+![Assignment_2_illustations_T_Net.png](Accumulated_data%2FAssignment_2_illustations_T_Net.png)
 
 
 ### Training
 
 Best validation Accuracy model is saves i.e. stopping early.<br />
 Examples: Train and Validation Accuracy for SE Net model:
+
 ![SE_Net Training and val Accuracy.png](Results%2FSE_Net%20Training%20and%20val%20Accuracy.png)
 <br />
 
-
 Examples Train and Validation Loss for SE Net model:
+
 ![SE_Net Training and val Loss.png](Results%2FSE_Net%20Training%20and%20val%20Loss.png)
 
 Mentioned Below are the setting used for training
 
+| Model                 | Initial Learning Rate | Final Learning Rate | LR Scheduler     | Batch Size | Epochs | Transfer Learning | Classifier Loss Function | Regression Loss Function | Execution Time per Epoch(avg mins) |
+|-----------------------|-----------------------|---------------------|------------------|------------|--------|-------------------|--------------------------|--------------------------|------------------------------------|
+| SE_Net                | 0.0001                | 0.0000001           | Cosine Annealing | 128        | 30     | FALSE             | Cross Entropy            | MSE                      | 51.8                               |
+| T_Net(Proposed model) | 0.0001                | 0.0000001           | Cosine Annealing | 512        | 30     | NA                | Cross Entropy            | MSE                      | 43                                 |
+| Eff_Net               | 0.0001                | 0.0000001           | Cosine Annealing | 32         | 12     | FALSE             | Cross Entropy            | MSE                      | 46                                 |
+| Mobile_Net            | 0.0001                | 0.0000001           | Cosine Annealing | 512        | 12     | FALSE             | Cross Entropy            | MSE                      | 32                                 |
 
 ## Results
 
@@ -288,3 +299,7 @@ The [Results](Results) directory contains both quantitative and qualitative metr
 - <**Model Name**>_experiment_data.csv >> Contains the saved experimental data in .csv format
 
 ![Results_Dir.PNG](Accumulated_data%2FResults_Dir.PNG)
+
+**Example Confusion Matrix for SE-NET**
+
+![Confusion_matrix_SE_Net.jpg](Results%2FConfusion_matrix_SE_Net.jpg)

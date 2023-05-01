@@ -1,0 +1,2 @@
+,Model/Backbone,krippendorff's aplha,cohen's kappa,RMSE_Arousal,RMSE_Valence,Correlation_Arousal,Correlation_Valence,SAGR_Arousal,SAGR_Valence,CCC_Arousal,CCC_Valence
+0,Mobile_net,0.34492450080950565,0.3584579632063749,0.27316493,0.3706748,0.4246141972870759,0.6978545197474328,0.19977222,0.2844599,0.30752757703769673,0.6545233618729835

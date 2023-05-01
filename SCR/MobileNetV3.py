@@ -17,7 +17,8 @@ import matplotlib.pyplot as plt
 import wandb
 import pandas as pd
 from CustomMobileNetV3 import mobilenet_model
-from HelperFunctions import run_epoch, run_test, save_classification_report, display_examples, compute_class_weights
+from HelperFunctions import run_epoch, run_test, save_classification_report, display_examples, compute_class_weights, \
+    display_examples, save_preformance_metric
 import time
 from sklearn.metrics import confusion_matrix, cohen_kappa_score, classification_report, ConfusionMatrixDisplay
 from sklearn.metrics import average_precision_score, mean_squared_error, auc
@@ -31,10 +32,10 @@ run_test_set = True  # True to run test set post training
 
 model_name = os.path.basename(__file__).split(".")[
     0]  # Name of the .py file running to standardize the names of the saved files and ease of later use
-batch_size = 128
+batch_size = 512
 learning_rate = 0.0001
-pretrained = True
-epochs = 40
+pretrained = False
+epochs = 10
 classes = 8
 device_name = torch.cuda.get_device_name(0)
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -104,7 +105,7 @@ if run_training:
 
     wandb.init(
         # set the wandb project where this run will be logged
-        project="Custom_model-test",
+        project="CV_Assignment_2",
 
         # track hyperparameters and run metadata
         config={
@@ -289,30 +290,17 @@ if run_test_set:
     predicted_classifications, predicted_arousal, predicted_valence, groundtruth_classification, groundtruth_arousal, groundtruth_valence = run_test(
         mobilenet, test_loader, device)
 
-    # confusion_matrix = MulticlassConfusionMatrix(num_classes=classes)
-    # confusion_matrix = confusion_matrix(groundtruth_classification, predicted_classifications)
-    print(groundtruth_classification, predicted_classifications)
-    confusion_matrix = confusion_matrix(groundtruth_classification, predicted_classifications)
-    display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix, display_labels=class_names)
-    display.plot()
-    plt.title(f"Confusion_matrix_{model_name}")
-    plt.savefig(f"../Results/Confusion_matrix_{model_name}.jpg")
-    krippendorff_data = np.array([groundtruth_classification, predicted_classifications])
-    print("Krippendorff's alpha for nominal metric: ", krippendorff.alpha(reliability_data=krippendorff_data,
-                                                                          level_of_measurement="nominal"))
-    print("cohen_kappa_score: ", cohen_kappa_score(groundtruth_classification, predicted_classifications))
-    print("AUC: ",
-          auc(groundtruth_classification, predicted_classifications))
-    print("AUC – Precision Recall: ",
-          average_precision_score(groundtruth_classification, predicted_classifications))
+    # # Computing Evaluation Metrics
+    save_preformance_metric(model_name, class_names, predicted_classifications, predicted_arousal, predicted_valence,
+                            groundtruth_classification, groundtruth_arousal, groundtruth_valence)
 
-    # Reusing the function from Assignment_1
-    report = classification_report(groundtruth_classification, predicted_classifications,
-                                   target_names=class_names, output_dict=True)
-    save_classification_report(report=report, path="../Results/", model_name=model_name)
+    # Creating an example batch of 16 images to display
+    examples_dataset, _ = torch.utils.data.random_split(test_set, [16, len(test_set) - 16])
+    example_dataloader = DataLoader(examples_dataset, batch_size=16)
+    predicted_classifications, predicted_arousal, predicted_valence, groundtruth_classification, groundtruth_arousal, groundtruth_valence = run_test(
+        mobilenet, example_dataloader, device)
 
-    print("MSE Arousal: ", mean_squared_error(groundtruth_arousal, predicted_arousal))
-    print("MSE Valence: ", mean_squared_error(groundtruth_valence, predicted_valence))
-
-    print("Correlation Arousal: ", np.corrcoef((groundtruth_arousal), (predicted_arousal)))
-    print("Correlation Valence: ", np.corrcoef((groundtruth_valence), (predicted_valence)))
+    # displays, 16 random examples from the dataset and their classification and Regression values, both Predicted and Ground Truth
+    display_examples(example_dataloader, model_name, class_names, predicted_classifications, predicted_arousal,
+                     predicted_valence,
+                     groundtruth_classification, groundtruth_arousal, groundtruth_valence)

@@ -25,7 +25,7 @@ from sklearn.metrics import average_precision_score, mean_squared_error, auc
 import krippendorff
 
 # These params can be updated to allow for better control of the program(i.e. the control knobs of this code)
-run_training = True  # False to run inferences, otherwise it'll start train the model
+run_training = False  # False to run inferences, otherwise it'll start train the model
 resume_training = False  # If training needs to be resumed from some epoch
 load_model = True  # If you want to load a model previously trained
 run_test_set = True  # True to run test set post training
@@ -57,9 +57,8 @@ figure_save_path = "../Results"
 mean = [0.485, 0.456, 0.406]
 std = [0.229, 0.224, 0.225]
 
-augmentations = Augmentations.Compose([Augmentations.HorizontalFlip(), Augmentations.VerticalFlip(),
-                                       Augmentations.GridDistortion(p=0.2),
-                                       Augmentations.GaussNoise()])
+augmentations = Augmentations.Compose([Augmentations.HorizontalFlip(),
+                                       Augmentations.GridDistortion(p=0.2)])
 
 train_set = FaceDataset(train_image_path, train_annotation_path, mean, std, augmentations)
 
@@ -70,8 +69,13 @@ train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
 test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=True)
 
 # computing weights for loss function
-class_weights = (compute_class_weights(train_annotation_path, class_names))
-class_weights = torch.tensor(class_weights, dtype=torch.float).to(device)
+# class_weights = (compute_class_weights(train_annotation_path, class_names))
+# class_weights = torch.tensor(class_weights, dtype=torch.float).to(device)
+
+# calculated once, then hard coded to save time
+class_weights = torch.tensor(np.array([0.480225, 0.267503, 1.41232, 2.55191, 5.63756, 9.45474, 1.44508, 9.58837]),
+                             dtype=torch.float).to(device)
+
 validation_set = FaceDataset(validation_image_path, validation_annotation_path, mean, std, augmentations)
 validation_loader = DataLoader(validation_set, batch_size=batch_size, shuffle=True)
 

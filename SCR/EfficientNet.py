@@ -15,14 +15,14 @@ from sklearn.metrics import average_precision_score, mean_squared_error, auc
 import krippendorff
 
 # These params can be updated to allow for better control of the program(i.e. the control knobs of this code)
-run_training = True  # False to run inferences, otherwise it'll start train the model
+run_training = False  # False to run inferences, otherwise it'll start train the model
 resume_training = False  # If training needs to be resumed from some epoch
 load_model = True  # If you want to load a model previously trained
 run_test_set = True  # True to run test set post training
 
 model_name = os.path.basename(__file__).split(".")[
     0]  # Name of the .py file running to standardize the names of the saved files and ease of later use
-batch_size = 32
+batch_size = 16
 learning_rate = 0.0001
 pretrained = False  # This option is not valid for Custom model, no pretrained weights exist
 epochs = 12

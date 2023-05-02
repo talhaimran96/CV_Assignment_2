@@ -282,7 +282,7 @@ Mentioned Below are the setting used for training
 |-----------------------|-----------------------|---------------------|------------------|------------|--------|-------------------|--------------------------|--------------------------|------------------------------------|
 | SE_Net                | 0.0001                | 0.0000001           | Cosine Annealing | 128        | 30     | FALSE             | Cross Entropy            | MSE                      | 51.8                               |
 | T_Net(Proposed model) | 0.0001                | 0.0000001           | Cosine Annealing | 512        | 30     | NA                | Cross Entropy            | MSE                      | 43                                 |
-| Eff_Net               | 0.0001                | 0.0000001           | Cosine Annealing | 32         | 12     | FALSE             | Cross Entropy            | MSE                      | 46                                 |
+| Eff_Net               | 0.0001                | 0.0000001           | Cosine Annealing | 32         | 12     | FALSE             | Cross Entropy            | MSE                      | 82                                 |
 | Mobile_Net            | 0.0001                | 0.0000001           | Cosine Annealing | 512        | 12     | FALSE             | Cross Entropy            | MSE                      | 32                                 |
 
 ## Results
@@ -303,3 +303,59 @@ The [Results](Results) directory contains both quantitative and qualitative metr
 **Example Confusion Matrix for SE-NET**
 
 ![Confusion_matrix_SE_Net.jpg](Results%2FConfusion_matrix_SE_Net.jpg)
+
+**Quantitative classification results**
+
+| Classification |                      |         |        |       |          |       |         |       |          |
+|----------------|----------------------|---------|--------|-------|----------|-------|---------|-------|----------|
+| Model          | Metric               | Classes |        |       |          |       |         |       |          |
+|                |                      | Neutral | Happy  | Sad   | Surprise | Fear  | Disgust | Anger | Contempt |
+| SE_Net         | F1-score             | 0.54    | 0.81   | 0.44  | 0.39     | 0.35  | 0.17    | 0.47  | 0.10     |
+|                | Precision            | 0.70    | 0.93   | 0.44  | 0.33     | 0.26  | 0.10    | 0.51  | 0.05     |
+|                | Recall               | 0.45    | 0.72   | 0.44  | 0.48     | 0.55  | 0.57    | 0.43  | 0.49     |
+|                | Support              | 15,198  | 26,546 | 5,130 | 2,830    | 1,304 | 723     | 5,050 | 750      |
+|                | Accuracy             | 57.58%  |        |       |          |       |         |       |          |
+|                | Krippendorff's Alpha | 0.44    |        |       |          |       |         |       |          |
+|                | Cohen's kappa        | 0.45    |        |       |          |       |         |       |          |
+| Talha_Net      | F1-score             | 0.42    | 0.74   | 0.35  | 0.32     | 0.23  | 0.13    | 0.39  | 0.07     |
+|                | Precision            | 0.65    | 0.93   | 0.32  | 0.24     | 0.16  | 0.08    | 0.36  | 0.04     |
+|                | Recall               | 0.32    | 0.62   | 0.37  | 0.50     | 0.45  | 0.41    | 0.42  | 0.41     |
+|                | Support              | 14,940  | 26,940 | 5,081 | 2,871    | 1,297 | 762     | 4,900 | 740      |
+|                | Accuracy             | 48.39%  |        |       |          |       |         |       |          |
+|                | Krippendorff's Alpha | 0.34    |        |       |          |       |         |       |          |
+|                | Cohen's kappa        | 0.35    |        |       |          |       |         |       |          |
+| Efficient_Net  | F1-score             | 0.63    | 0.84   | 0.59  | 0.52     | 0.54  | 0.49    | 0.62  | 0.19     |
+|                | Precision            | 0.72    | 0.96   | 0.56  | 0.41     | 0.42  | 0.35    | 0.59  | 0.11     |
+|                | Recall               | 0.55    | 0.75   | 0.63  | 0.70     | 0.75  | 0.79    | 0.64  | 0.78     |
+|                | Support              | 14,957  | 26,952 | 5,040 | 2,782    | 1,259 | 751     | 5,064 | 726      |
+|                | Accuracy             | 67.69%  |        |       |          |       |         |       |          |
+|                | Krippendorff's Alpha | 0.57    |        |       |          |       |         |       |          |
+|                | Cohen's kappa        | 0.57    |        |       |          |       |         |       |          |
+| Mobile_Net     | F1-score             | 0.44    | 0.74   | 0.33  | 0.33     | 0.26  | 0.17    | 0.42  | 0.09     |
+|                | Precision            | 0.64    | 0.94   | 0.31  | 0.25     | 0.18  | 0.10    | 0.40  | 0.05     |
+|                | Recall               | 0.34    | 0.61   | 0.34  | 0.46     | 0.49  | 0.54    | 0.44  | 0.53     |
+|                | Support              | 14,879  | 27,080 | 5,042 | 2,795    | 1,263 | 768     | 4,985 | 719      |
+|                | Accuracy             | 48.97%  |        |       |          |       |         |       |          |
+|                | Krippendorff's Alpha | 0.34    |        |       |          |       |         |       |          |
+|                | Cohen's kappa        | 0.36    |        |       |          |       |         |       |          |
+
+
+**Quantitative regression results**
+
+| Regression          |        |           |               |            |
+|---------------------|--------|-----------|---------------|------------|
+| Metric              | Model  |           |               |            |
+|                     | SE_Net | Talha_Net | Efficient_Net | Mobile_Net |
+| RMSE_Arousal        | 0.26   | 0.28      | 0.24          | 0.27       |
+| RMSE_Valence        | 0.38   | 0.38      | 0.30          | 0.37       |
+| Correlation_Arousal | 0.50   | 0.39      | 0.61          | 0.42       |
+| Correlation_Valence | 0.71   | 0.69      | 0.81          | 0.70       |
+| SAGR_Arousal        | 0.19   | 0.21      | 0.18          | 0.20       |
+| SAGR_Valence        | 0.29   | 0.30      | 0.23          | 0.28       |
+| CCC_Arousal         | 0.39   | 0.25      | 0.55          | 0.31       |
+| CCC_Valence         | 0.60   | 0.63      | 0.80          | 0.65       |
+
+
+**Example Classification and Regression results SE NET**
+
+![SE_Net_examples.png](Results%2FSE_Net_examples.png)
